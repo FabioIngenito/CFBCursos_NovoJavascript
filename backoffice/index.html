@@ -1,0 +1,76 @@
+<!-- 
+Cannot GET /favicon.ico
+Failed to load resource: the server responded with a status of 404 (Not Found)
+
+https://en.wikipedia.org/wiki/Favicon#How_to_use
+-->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estoque - BackOffice</title>
+  <link rel="shortcut icon" href="../../olho.png">
+  <link rel="stylesheet" type="text/css" href="../estoque_geral.css">
+  <link rel="stylesheet" type="text/css" href="./index.css">
+</head>
+
+<body> 
+
+  <div id="primeiroAcesso" class="popup ocultarPopup">
+    <div class="janelaPopup">
+      <input type="hidden" id="iddefsenha" value="-1">
+      <div class="tituloPopup">
+        <div id="tituloPopup">Definição de Senha</div>
+        <img src="../../imgs/fechar.svg" class="btn_janelaopera" id="btn_fecharPopupDefSenha">
+      </div>
+      <div class="corpoPopup">
+        <div class="campoForm">
+          <label>E-Mail</label>
+          <input type="email" id="emaildefsenha" name="emaildefsenha" readonly>
+        </div>
+        <div class="campoForm">
+          <label>Senha</label>
+          <input type="password" id="f_senha1" name="f_senha1">
+        </div>
+        <div class="campoForm">
+          <label>Redigite a Senha</label>
+          <input type="password" id="f_senha2" name="f_senha2">
+        </div>
+      </div>
+      <div class="rodapePopup">
+        <button id="btn_gravarSenha" class="btn_comandoPopup">Gravar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="login" class="popup">
+    <div class="janelaPopup">
+      <div class="tituloPopup">
+        <div id="tituloPopup">Login</div>
+      </div>
+      <div class="corpoPopup">
+        <div class="campoForm">
+          <label>E-Mail</label>
+          <input type="email" id="f_email" name="f_email">
+        </div>
+        <div class="campoForm">
+          <label>Senha</label>
+          <input type="password" id="f_senha" name="f_senha">
+        </div>
+      </div>
+      <div class="rodapePopup">
+        <button id="btn_login" class="btn_comandoPopup">Login</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- <script src="../utils/globais.js"></script> -->
+  <script src="../estoque_geral.js" type="module"></script>
+  <script src="index.js" type="module"></script>
+</body>
+
+</html>

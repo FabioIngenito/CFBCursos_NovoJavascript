@@ -1,0 +1,507 @@
+[
+    {
+        "id": "65d0e74037224685",
+        "type": "tab",
+        "label": "Estoque - Login",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a12371042feef971",
+        "type": "http in",
+        "z": "65d0e74037224685",
+        "name": "",
+        "url": "/login/:email/:senha",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 40,
+        "wires": [
+            [
+                "f9c1e3f575427357"
+            ]
+        ]
+    },
+    {
+        "id": "e75437a97003f0e7",
+        "type": "debug",
+        "z": "65d0e74037224685",
+        "name": "1º Acesso",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 670,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "f9c1e3f575427357",
+        "type": "function",
+        "z": "65d0e74037224685",
+        "name": "SELECT pessoa",
+        "func": "const email = msg.req.params.email;\nmsg.senha_digitada = msg.req.params.senha;\n\nmsg.topic = `SELECT \n             n_pessoa_pessoa,\n             s_email_pessoa,\n             s_nome_pessoa,\n             s_senha_pessoa \n             FROM pessoa\n             WHERE \n             s_email_pessoa = \"${email}\"`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 40,
+        "wires": [
+            [
+                "dcfb6bf510431d20"
+            ]
+        ]
+    },
+    {
+        "id": "dcfb6bf510431d20",
+        "type": "mysql",
+        "z": "65d0e74037224685",
+        "mydb": "4d85104871b77efc",
+        "name": "Estoque",
+        "x": 550,
+        "y": 40,
+        "wires": [
+            [
+                "157cf404a30803a7"
+            ]
+        ]
+    },
+    {
+        "id": "157cf404a30803a7",
+        "type": "function",
+        "z": "65d0e74037224685",
+        "name": "SENHA",
+        "func": "msg.senha_atual = msg.payload[0].s_senha_pessoa;\nmsg.n_pessoa_pessoa  = msg.payload[0].n_pessoa_pessoa;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 110,
+        "y": 160,
+        "wires": [
+            [
+                "cd28f3cb78f4f5a9",
+                "842cd4fe8fc30a4d"
+            ]
+        ]
+    },
+    {
+        "id": "cd28f3cb78f4f5a9",
+        "type": "switch",
+        "z": "65d0e74037224685",
+        "name": "",
+        "property": "senha_atual",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 290,
+        "y": 160,
+        "wires": [
+            [
+                "d3debf421ca173fd"
+            ],
+            [
+                "2868e7f1bb8a26ee"
+            ]
+        ]
+    },
+    {
+        "id": "d3debf421ca173fd",
+        "type": "function",
+        "z": "65d0e74037224685",
+        "name": "PRIMEIRO ACESSO",
+        "func": "// msg.payload[0].s_senha_pessoa = null;\n// msg.payload[0].senha_atual = null;\nmsg.payload[0].retorno = 205;\n\n// msg.s_senha_pessoa = null;\n// msg.senha_atual = null;\n//msg.senha_digitada = null;\nmsg.retorno = 205;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 140,
+        "wires": [
+            [
+                "e75437a97003f0e7",
+                "4ea54c9867fc154a"
+            ]
+        ]
+    },
+    {
+        "id": "2868e7f1bb8a26ee",
+        "type": "function",
+        "z": "65d0e74037224685",
+        "name": "VERIFICAR SENHA",
+        "func": "msg.senha_atual = msg.payload[0].s_senha_pessoa\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 190,
+        "wires": [
+            [
+                "e1eabfd7490a324d"
+            ]
+        ]
+    },
+    {
+        "id": "e1eabfd7490a324d",
+        "type": "switch",
+        "z": "65d0e74037224685",
+        "name": "",
+        "property": "senha_atual",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "senha_digitada",
+                "vt": "msg"
+            },
+            {
+                "t": "neq",
+                "v": "senha_digitada",
+                "vt": "msg"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 660,
+        "y": 190,
+        "wires": [
+            [
+                "fce09f2ff84ea0c7"
+            ],
+            [
+                "3a09bb09a21b44ad"
+            ]
+        ]
+    },
+    {
+        "id": "fce09f2ff84ea0c7",
+        "type": "function",
+        "z": "65d0e74037224685",
+        "name": "SENHA OKAY",
+        "func": "msg.payload[0].s_senha_pessoa = null;\nmsg.payload[0].senha_atual = null;\nmsg.payload[0].retorno = 200;\n\nmsg.s_senha_pessoa = null;\nmsg.senha_atual = null;\n//msg.senha_digitada = null;\nmsg.retorno = 200;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 170,
+        "wires": [
+            [
+                "1646b351710fa923",
+                "c82736a0e0490c3c"
+            ]
+        ]
+    },
+    {
+        "id": "3a09bb09a21b44ad",
+        "type": "function",
+        "z": "65d0e74037224685",
+        "name": "SENHA ERRADA",
+        "func": "msg.payload[0].s_senha_pessoa = null;\nmsg.payload[0].senha_atual = null;\nmsg.payload[0].retorno = 208;\n\nmsg.s_senha_pessoa = null;\nmsg.senha_atual = null;\n//msg.senha_digitada = null;\nmsg.retorno = 208;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 210,
+        "wires": [
+            [
+                "ad8d8fca9a7019f8",
+                "452c350306f674db"
+            ]
+        ]
+    },
+    {
+        "id": "1646b351710fa923",
+        "type": "http response",
+        "z": "65d0e74037224685",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 1020,
+        "y": 170,
+        "wires": []
+    },
+    {
+        "id": "ad8d8fca9a7019f8",
+        "type": "http response",
+        "z": "65d0e74037224685",
+        "name": "",
+        "statusCode": "208",
+        "headers": {},
+        "x": 1020,
+        "y": 210,
+        "wires": []
+    },
+    {
+        "id": "c82736a0e0490c3c",
+        "type": "debug",
+        "z": "65d0e74037224685",
+        "name": "Senha OKAY",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1030,
+        "y": 130,
+        "wires": []
+    },
+    {
+        "id": "452c350306f674db",
+        "type": "debug",
+        "z": "65d0e74037224685",
+        "name": "Senha ERRADA",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1040,
+        "y": 250,
+        "wires": []
+    },
+    {
+        "id": "842cd4fe8fc30a4d",
+        "type": "debug",
+        "z": "65d0e74037224685",
+        "name": "debug 54",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 300,
+        "y": 230,
+        "wires": []
+    },
+    {
+        "id": "18b2e55f7fcc9433",
+        "type": "http in",
+        "z": "65d0e74037224685",
+        "name": "",
+        "url": "/gravarnovasenha",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 750,
+        "wires": [
+            [
+                "08dfa6235a29c8c2"
+            ]
+        ]
+    },
+    {
+        "id": "dea3e4d5eadb6b50",
+        "type": "http response",
+        "z": "65d0e74037224685",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 710,
+        "y": 750,
+        "wires": []
+    },
+    {
+        "id": "08dfa6235a29c8c2",
+        "type": "function",
+        "z": "65d0e74037224685",
+        "name": "UPDATE pessoa",
+        "func": "msg.payload = JSON.parse(msg.payload);\n\nconst n_pessoa_pessoa = msg.payload.n_pessoa_pessoa;\nconst s_senha_pessoa =  msg.payload.s_senha_pessoa;\n\nmsg.topic = `UPDATE pessoa \n             SET s_senha_pessoa = ${s_senha_pessoa}\n             WHERE n_pessoa_pessoa = ${n_pessoa_pessoa}`\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 750,
+        "wires": [
+            [
+                "53d844cc7aef3547"
+            ]
+        ]
+    },
+    {
+        "id": "53d844cc7aef3547",
+        "type": "mysql",
+        "z": "65d0e74037224685",
+        "mydb": "4d85104871b77efc",
+        "name": "Estoque",
+        "x": 550,
+        "y": 750,
+        "wires": [
+            [
+                "dea3e4d5eadb6b50",
+                "b4031e8fc5d28a44"
+            ]
+        ]
+    },
+    {
+        "id": "b4031e8fc5d28a44",
+        "type": "debug",
+        "z": "65d0e74037224685",
+        "name": "CERTO",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "4ea54c9867fc154a",
+        "type": "http response",
+        "z": "65d0e74037224685",
+        "name": "",
+        "statusCode": "205",
+        "headers": {},
+        "x": 670,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "fc8640e899337ec4",
+        "type": "http in",
+        "z": "65d0e74037224685",
+        "d": true,
+        "name": "",
+        "url": "/login/:email/:senha",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 340,
+        "wires": [
+            [
+                "e5220d455db631e6"
+            ]
+        ]
+    },
+    {
+        "id": "e5220d455db631e6",
+        "type": "function",
+        "z": "65d0e74037224685",
+        "d": true,
+        "name": "SELECT pessoa",
+        "func": "const email = msg.req.params.email;\nmsg.senha_digitada = msg.req.params.senha;\n\nmsg.topic = `SELECT \n             n_pessoa_pessoa,\n             s_email_pessoa,\n             s_nome_pessoa,\n             s_senha_pessoa \n             FROM pessoa\n             WHERE \n             s_email_pessoa = \"${email}\"`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 340,
+        "wires": [
+            [
+                "452805e5b1b7d51f"
+            ]
+        ]
+    },
+    {
+        "id": "452805e5b1b7d51f",
+        "type": "mysql",
+        "z": "65d0e74037224685",
+        "d": true,
+        "mydb": "4d85104871b77efc",
+        "name": "Estoque",
+        "x": 550,
+        "y": 340,
+        "wires": [
+            [
+                "9ea6d3e20912c054",
+                "8f20bb569abaa980"
+            ]
+        ]
+    },
+    {
+        "id": "9ea6d3e20912c054",
+        "type": "debug",
+        "z": "65d0e74037224685",
+        "d": true,
+        "name": "TESTE",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "8f20bb569abaa980",
+        "type": "http response",
+        "z": "65d0e74037224685",
+        "d": true,
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 700,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "4d85104871b77efc",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "Estoque",
+        "tz": "",
+        "charset": "UTF8"
+    }
+]
