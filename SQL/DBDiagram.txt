@@ -1,0 +1,69 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table pessoa{
+  n_pessoa_pessoa int [pk, increment]
+  n_fornecedor_fornecedor int [ref: > fornecedor.n_fornecedor_fornecedor]
+  n_tipopessoa_tipopessoa int [ref: > tipopessoa.n_tipopessoa_tipopessoa]
+  s_nome_pessoa varchar
+  s_email_pessoa varchar
+  s_senha_pessoa varchar
+  n_primacess_pessoa int
+  s_foto_pessoa mediumtext
+  c_status_pessoa char
+}
+
+Table telefone{
+  n_telefone_telefone int [pk, increment]
+  n_pessoa_pessoa int [ref: > pessoa.n_pessoa_pessoa]
+  s_ddd_telefone varchar
+  s_numero_telefone varchar
+}
+
+Table tipopessoa {
+  n_tipopessoa_tipopessoa int [pk, increment]
+  s_descricao_tipopessoa varchar
+  n_nivel_tipopessoa int
+}
+
+Table fornecedor {
+  n_fornecedor_fornecedor int [pk, increment]
+  s_desc_fornecedor varchar
+  s_logo_fornecedor mediumtext
+  c_status_fornecedor char
+}
+
+Table Contatofornecedor {
+  n_Contatofornecedor_Contatofornecedor int [pk, increment]
+  n_fornecedor_fornecedor int [ref: > fornecedor.n_fornecedor_fornecedor]
+  n_pessoa_pessoa int [ref: > pessoa.n_pessoa_pessoa]
+}
+
+Table produto{
+  n_cod_produto int [pk]
+  n_tipoProduto_tipoProduto int [ref: > tipoproduto.n_tipoproduto_tipoproduto]
+  s_desc_produto varchar
+  n_fornecedor_fornecedor int [ref: > fornecedor.n_fornecedor_fornecedor]
+  n_qtde_produto int
+  c_status_produto char
+}
+
+Table tipoproduto {
+  n_tipoproduto_tipoproduto int [pk, increment]
+  s_desc_tipoproduto varchar
+}
+
+Table movimentacao {
+  n_movimentacao_movimentacao int [pk, increment]
+  n_pessoa_pessoa int [ref: > pessoa.n_pessoa_pessoa]
+  c_tipo_movimentacao char
+  n_qtde_movimentacao int
+  dt_datahora_movimentacao datetime
+}
+
+Table token {
+  n_token_token int [pk, increment]
+  n_pessoa_pessoa int [ref:> pessoa.n_pessoa_pessoa]
+  s_token_token varchar
+  s_validade_token varchar
+}
