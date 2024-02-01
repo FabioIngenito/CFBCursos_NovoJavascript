@@ -1,0 +1,119 @@
+[
+    {
+        "id": "a4f050e0a13a77de",
+        "type": "tab",
+        "label": "Estoque - Token",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "1abfb96aa06f081f",
+        "type": "http response",
+        "z": "a4f050e0a13a77de",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 820,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "445d1e4fc95a047e",
+        "type": "debug",
+        "z": "a4f050e0a13a77de",
+        "name": "Senha OKAY",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 830,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "48636bf080909179",
+        "type": "function",
+        "z": "a4f050e0a13a77de",
+        "name": "function 9",
+        "func": "const n_pessoa_pessoa = msg.payload[0].n_pessoa_pessoa;\nconst t1=Math.random().toString(16).substring(2);\nconst t2=Math.random().toString(16).substring(2);\nconst t3=Math.random().toString(16).substring(2);\nconst t4=Math.random().toString(16).substring(2);\n//console.log(t1);\nconst s_token_token = t1+t2+t3+t4;\n\nconst ts=new Date().getTime() + (60000 * 5);\n// console.log(ts);\n// const data = new Date(ts);\n// const ano = data.getFullYear();\n// const mes = data.getMonth();\n// const dia = data.getDate();\n// const hora = data.getHours();\n// const minuto = data.getMinutes();\n// const segundo = data.getSeconds();\n// console.log(`${dia}/${mes}/${ano} - ${hora}:${minuto}:${segundo}`)\n\nconst s_validade_token = ts;\nmsg.token = s_token_token;\n\nmsg.topic = `INSERT INTO token (n_pessoa_pessoa, \n                                s_token_token, \n                                s_validade_token) \n             VALUES (${n_pessoa_pessoa},\n                    \"${s_token_token}\",\n                    \"${s_validade_token}\")`\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 80,
+        "wires": [
+            [
+                "9e31f6e65be71f4b"
+            ]
+        ]
+    },
+    {
+        "id": "9e31f6e65be71f4b",
+        "type": "mysql",
+        "z": "a4f050e0a13a77de",
+        "mydb": "4d85104871b77efc",
+        "name": "Estoque",
+        "x": 460,
+        "y": 80,
+        "wires": [
+            [
+                "550580ab13b88468"
+            ]
+        ]
+    },
+    {
+        "id": "5257e71ac72d6b6a",
+        "type": "link in",
+        "z": "a4f050e0a13a77de",
+        "name": "Entrada Token",
+        "links": [
+            "7192bfad073b8171"
+        ],
+        "x": 165,
+        "y": 80,
+        "wires": [
+            [
+                "48636bf080909179"
+            ]
+        ]
+    },
+    {
+        "id": "550580ab13b88468",
+        "type": "function",
+        "z": "a4f050e0a13a77de",
+        "name": "function 10",
+        "func": "msg.payload.retorno = 200;\nmsg.payload.token = msg.token;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 80,
+        "wires": [
+            [
+                "445d1e4fc95a047e",
+                "1abfb96aa06f081f"
+            ]
+        ]
+    },
+    {
+        "id": "4d85104871b77efc",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "Estoque",
+        "tz": "",
+        "charset": "UTF8"
+    }
+]
