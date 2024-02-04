@@ -43,28 +43,35 @@ btn_login.addEventListener("click", (evt) => {
     console.log("SENHA: " + senha);
 
     const endpointLogin = `${serv}/login/${email}/${senha}`;
+    //const endpointLogin = serv + "/login/" + email + "/" + senha;
 
     console.log("EndpointLogin: " + endpointLogin);
 
     //      .then((res) => res.json())
+    // JSON.stringify(res))
 
     fetch(endpointLogin)
-      .then((res) => JSON.stringify(res))
+      .then((res) => res.json())
       .then((res) => {
-        console.log("RES:" + res);
+        console.log("RES:" + JSON.stringify(res));
         console.log("STATUS:" + res.status);
         //console.log("RETORNO: " + res[0].retorno);
         console.log("RETORNO: " + res.retorno);
         console.log("ID: " + res.n_pessoa_pessoa);
 
-        if (res.status == 200) {
+        if (res.retorno == 200) {
           // senha OK
-          console.log("OK: " + res.status);
-          console.log("res[0]: " + res[0]);
-          sessionStorage.setItem("n_pessoa_pessoa", res[0].n_pessoa_pessoa);
-          sessionStorage.setItem("s_nome_pessoa", res[0].s_nome_pessoa);
+          console.log("OK: " + res.retorno);
+          console.log("n_pessoa_pessoa: " + res.n_pessoa_pessoa);
+          console.log("s_nome_pessoa: " + res.s_nome_pessoa);
+          //console.log("res[0]: " + res[0]);
+          sessionStorage.setItem("n_pessoa_pessoa", res.n_pessoa_pessoa);
+          sessionStorage.setItem("s_nome_pessoa", res.s_nome_pessoa);
+          sessionStorage.setItem("n_token_token", res.insertId);
+          sessionStorage.setItem("s_token_token", res.token);
           window.location.href = "./main.html";
-        } else if (res.status == 208) {
+          //stop();
+        } else if (res.retorno == 208) {
           // senha ERRADA
           console.log("ERRADA: " + res.status);
 
@@ -79,7 +86,7 @@ btn_login.addEventListener("click", (evt) => {
           };
 
           Cxmsg.mostrar(config);
-        } else if (res.status == 205) {
+        } else if (res.retorno == 205) {
           console.log("1º ACESSO: " + res.status);
           // primeiro acesso
           iddefsenha.value = res.n_pessoa_pessoa;
@@ -88,7 +95,8 @@ btn_login.addEventListener("click", (evt) => {
           login.classList.add("ocultarPopup");
           primeiroAcesso.classList.remove("ocultarPopup");
         }
-      });
+      })
+      .catch((err) => console.log("ERRO: " + err));
   }
 });
 
