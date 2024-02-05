@@ -7,14 +7,19 @@ const verificarToken = () => {
   fetch(endpoint)
     .then((res) => res.json())
     .then((res) => {
-      console.log(res[0]);
+      //console.log(res[0]);
 
-      if (res[0].retorno == 200) {
+      if (res.retorno == 200) {
         //console.log("OKay");
         pagina();
       } else {
-        alert("Token inválido");
         //console.log("NÃO Okay");
+        alert("Token inválido");
+        sessionStorage.removeItem("n_pessoa_pessoa");
+        sessionStorage.removeItem("s_nome_pessoa");
+        sessionStorage.removeItem("n_token_token");
+        sessionStorage.removeItem("s_token_token");
+        windows.location.href = "./index.html";
       }
     });
 };
