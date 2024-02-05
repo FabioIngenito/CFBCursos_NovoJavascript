@@ -1,35 +1,60 @@
-if (sessionStorage.getItem("n_pessoa_pessoa") == "-1") {
-  window.location.href = "./index.html";
-}
+const serv = sessionStorage.getItem("servidor_nodered");
 
-const btn_menuPrincipal = document.querySelector("#btn_menuPrincipal");
-const menuPrincipal = document.querySelector("#menuPrincipal");
-const todosmenusprincipais = [...document.querySelectorAll(".btn_menuItem")];
-const divid = document.querySelector("#id");
-const divnome = document.querySelector("#nome");
-const btnlogoff = document.querySelector("#btnlogoff");
+const verificarToken = () => {
+  const token = sessionStorage.getItem("s_token_token");
+  const endpoint = `${serv}/verificatoken/${token}`;
 
-btn_menuPrincipal.addEventListener("click", (evt) => {
-  menuPrincipal.classList.toggle("ocultar");
-});
+  fetch(endpoint)
+    .then((res) => res.json())
+    .then((res) => {
+      console.log(res[0]);
 
-//console.log(todosmenusprincipais);
+      if (res[0].retorno == 200) {
+        //console.log("OKay");
+        pagina();
+      } else {
+        alert("Token inválido");
+        //console.log("NÃO Okay");
+      }
+    });
+};
 
-todosmenusprincipais.forEach((e) => {
-  e.addEventListener("click", (evt) => {
-    menuPrincipal.classList.add("ocultar");
+verificarToken();
+
+const pagina = () => {
+  if (sessionStorage.getItem("n_pessoa_pessoa") == "-1") {
+    window.location.href = "./index.html";
+  }
+
+  const btn_menuPrincipal = document.querySelector("#btn_menuPrincipal");
+  const menuPrincipal = document.querySelector("#menuPrincipal");
+  const todosmenusprincipais = [...document.querySelectorAll(".btn_menuItem")];
+  const divid = document.querySelector("#id");
+  const divnome = document.querySelector("#nome");
+  const btnlogoff = document.querySelector("#btnlogoff");
+
+  btn_menuPrincipal.addEventListener("click", (evt) => {
+    menuPrincipal.classList.toggle("ocultar");
   });
-});
 
-btnlogoff.addEventListener("click", (evt) => {
-  sessionStorage.setItem("n_pessoa_pessoa", "-1");
-  sessionStorage.setItem("s_nome_pessoa", "-1");
+  //console.log(todosmenusprincipais);
 
-  window.location.href = "./index.html";
-});
+  todosmenusprincipais.forEach((e) => {
+    e.addEventListener("click", (evt) => {
+      menuPrincipal.classList.add("ocultar");
+    });
+  });
 
-const n_pessoa_pessoa = sessionStorage.getItem("n_pessoa_pessoa");
-const s_nome_pessoa = sessionStorage.getItem("s_nome_pessoa");
+  btnlogoff.addEventListener("click", (evt) => {
+    sessionStorage.setItem("n_pessoa_pessoa", "-1");
+    sessionStorage.setItem("s_nome_pessoa", "-1");
 
-divid.innerHTML = `id: ${n_pessoa_pessoa}`;
-divnome.innerHTML = `nome: ${s_nome_pessoa}`;
+    window.location.href = "./index.html";
+  });
+
+  const n_pessoa_pessoa = sessionStorage.getItem("n_pessoa_pessoa");
+  const s_nome_pessoa = sessionStorage.getItem("s_nome_pessoa");
+
+  divid.innerHTML = `id: ${n_pessoa_pessoa}`;
+  divnome.innerHTML = `nome: ${s_nome_pessoa}`;
+};
