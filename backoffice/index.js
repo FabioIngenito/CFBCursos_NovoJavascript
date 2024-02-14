@@ -42,38 +42,56 @@ btn_login.addEventListener("click", (evt) => {
     console.log("EMAIL: " + email);
     console.log("SENHA: " + senha);
 
-    const endpointLogin = `${serv}/login/${email}/${senha}`;
+    const endpoint = `${serv}/login/${email}/${senha}`;
     //const endpointLogin = serv + "/login/" + email + "/" + senha;
 
-    console.log("EndpointLogin: " + endpointLogin);
+    console.log("Endpoint: " + endpoint);
 
     //      .then((res) => res.json())
     // JSON.stringify(res))
 
-    fetch(endpointLogin)
+    fetch(endpoint)
       .then((res) => res.json())
       .then((res) => {
-        console.log("RES:" + JSON.stringify(res));
-        console.log("STATUS:" + res.status);
-        //console.log("RETORNO: " + res[0].retorno);
-        console.log("RETORNO: " + res.retorno);
-        console.log("ID: " + res.n_pessoa_pessoa);
+        // Explicação do IF abaixo:
+        // 200 - senha correta - retorna UPDATE token sem array
+        // 208 - primeiro acesso - retorna SELECT (dados em array)
+        // 205 - senha arrada - retorna SELECT (dados em array)
+
+        if (Array.isArray(res)) {
+          console.log("RES:" + JSON.stringify(res[0]));
+          // NÃO RETORNA O "STATUS":
+          //console.log("STATUS:" + res[0].status);
+          console.log("RETORNO: " + res[0].retorno);
+          console.log("ID: " + res[0].n_pessoa_pessoa);
+        } else {
+          console.log("RES:" + JSON.stringify(res));
+          // NÃO RETORNA O "STATUS":
+          //console.log("STATUS:" + res.status);
+          console.log("RETORNO: " + res.retorno);
+          console.log("ID: " + res.n_pessoa_pessoa);
+        }
 
         if (res.retorno == 200) {
           // senha OK
-          console.log("OK: " + res.retorno);
+          console.log("Senha OK: " + res.retorno);
           console.log("n_pessoa_pessoa: " + res.n_pessoa_pessoa);
           console.log("s_nome_pessoa: " + res.s_nome_pessoa);
-          //console.log("res[0]: " + res[0]);
+
           sessionStorage.setItem("n_pessoa_pessoa", res.n_pessoa_pessoa);
           sessionStorage.setItem("s_nome_pessoa", res.s_nome_pessoa);
           sessionStorage.setItem("n_token_token", res.insertId);
           sessionStorage.setItem("s_token_token", res.token);
           window.location.href = "./main.html";
-          //stop();
-        } else if (res.retorno == 208) {
+          stop();
+        } else if (res[0].retorno == 208) {
           // senha ERRADA
-          console.log("ERRADA: " + res.status);
+          console.log("ERRADA RETORNO: " + res[0].retorno);
+          // NÃO RETORNA O "STATUS":
+          //console.log("ERRADA STATUS: " + res.status);
+
+          f_senha.value = "";
+          f_senha.focus();
 
           const config = {
             titulo: "ERRO",
@@ -86,10 +104,10 @@ btn_login.addEventListener("click", (evt) => {
           };
 
           Cxmsg.mostrar(config);
-        } else if (res.retorno == 205) {
-          console.log("1º ACESSO: " + res.status);
+        } else if (res[0].retorno == 205) {
+          console.log("1º ACESSO: " + res[0].status);
           // primeiro acesso
-          iddefsenha.value = res.n_pessoa_pessoa;
+          iddefsenha.value = res[0].n_pessoa_pessoa;
           console.log("ID Senha: " + iddefsenha.value);
           emaildefsenha.value = f_email.value;
           login.classList.add("ocultarPopup");
